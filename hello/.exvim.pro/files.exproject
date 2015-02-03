@@ -1,0 +1,8 @@
+" Press <F1> for help
+
+-[F]hello {
+ |-hello.c
+ |-Makefile
+ |-pro.exvim }
+
+
