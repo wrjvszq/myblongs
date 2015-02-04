@@ -1,0 +1,1 @@
+cmd_/home/wrj/my_linux/kernel_module/myblong/memdev/driver/memdev.ko := ld -r -m elf_i386 -T /smbshare/linux-2.6.39/scripts/module-common.lds --build-id  -o /home/wrj/my_linux/kernel_module/myblong/memdev/driver/memdev.ko /home/wrj/my_linux/kernel_module/myblong/memdev/driver/memdev.o /home/wrj/my_linux/kernel_module/myblong/memdev/driver/memdev.mod.o
