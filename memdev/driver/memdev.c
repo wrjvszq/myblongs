@@ -10,6 +10,7 @@
 #include<linux/cdev.h>
 #include<linux/fs.h>
 #include<asm/uaccess.h>
+#include"memdev.h"
 
 #define MEM_SIZE 1024
 
@@ -22,6 +23,17 @@ struct mem_dev{
 };
 
 struct mem_dev my_dev;
+
+long mem_ioctl(struct file *fd, unsigned int cmd, unsigned long arg){
+    switch(cmd){
+    case MEM_RESTART:
+        printk("<0> memdev is restart");
+        break;
+    default:
+        return -EINVAL;
+    }
+    return 0;
+}
 
 /*打开设备*/
 int mem_open(struct inode *inode, struct file *filp){
@@ -111,6 +123,7 @@ const struct file_operations mem_ops = {
     .read = mem_read,
     .write = mem_write,
     .release = mem_release,
+    .unlocked_ioctl = mem_ioctl,
 };
 
 static int memdev_init(void){

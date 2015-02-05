@@ -519,6 +519,7 @@ deps_/home/wrj/my_linux/kernel_module/myblong/memdev/driver/memdev.o := \
     $(wildcard include/config/x86/intel/usercopy.h) \
   /smbshare/linux-2.6.39/arch/x86/include/asm/uaccess_32.h \
     $(wildcard include/config/debug/strict/user/copy/checks.h) \
+  /home/wrj/my_linux/kernel_module/myblong/memdev/driver/memdev.h \
 
 /home/wrj/my_linux/kernel_module/myblong/memdev/driver/memdev.o: $(deps_/home/wrj/my_linux/kernel_module/myblong/memdev/driver/memdev.o)
 
