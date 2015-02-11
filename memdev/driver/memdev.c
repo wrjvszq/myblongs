@@ -20,6 +20,7 @@ struct mem_dev{
     struct cdev cdev;
     int mem[MEM_SIZE];//全局内存4k
     dev_t devno;
+    struct semaphore sem;//并发控制所使用的信号量
 };
 
 struct mem_dev my_dev;
@@ -60,12 +61,17 @@ static ssize_t mem_read(struct file *filp, char __user *buf, size_t size, loff_t
     if(count > MEM_SIZE - p)/*读取大小修正*/
         count = MEM_SIZE - p;
 
+    if(down_interruptible(&my_dev.sem))//获取信号量
+        return - ERESTARTSYS;
+
     if(copy_to_user(buf,pbase + p,size)){
        ret = - EFAULT;
     }else{
         *ppos += count;
         ret = count;
     }
+    
+    up(&my_dev.sem);//释放信号量
 
     return ret;
 }
@@ -81,12 +87,18 @@ static ssize_t mem_write(struct file *filp, const char __user *buf, size_t size,
     if(count > MEM_SIZE - p)
         count = MEM_SIZE - p;
 
+    if(down_interruptible(&my_dev.sem))//获取信号量
+        return - ERESTARTSYS;
+
     if(copy_from_user(pbase + p,buf,count)){
        ret = - EFAULT;
     }else{
         *ppos += count;
         ret = count;
     }
+
+    up(&my_dev.sem);//释放信号量
+
     return ret;
 }
 
@@ -135,6 +147,7 @@ static int memdev_init(void){
         cdev_init(&my_dev.cdev,&mem_ops);/*初始化字符设备*/
         cdev_add(&my_dev.cdev,my_dev.devno,1);/*添加字符设备*/
     }
+    sema_init(&my_dev.sem,1);//初始化信号量
 
     return ret;   
 }
